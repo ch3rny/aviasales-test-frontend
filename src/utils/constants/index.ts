@@ -1,3 +1,3 @@
-export { avaibleFilters } from "./filters";
-export { avaibleSorting } from "./sorting";
-export { Plural } from './plural';
+export * from "./filters";
+export * from "./sorting";
+export * from './plural';

@@ -1,25 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import styles from './styles.module.css'
-import { avaibleFilters } from 'utils/constants'
+import { avaibleFilters, FilterValue } from 'utils/constants'
 import { createFilter } from 'utils/helpers'
-import { useSelector, useDispatch } from 'react-redux'
-import { RootStore } from 'store'
-
+import { useSelector, useDispatch } from 'store'
+import { setFilter } from 'store/actions/filter'
 
 export const FilterPicker = () => {
-  const stops = useSelector((state: RootStore)  => state.filter.stops)
+  const stops = useSelector(state => state.filter.stops)
   const dispatch = useDispatch()
-  const [filters, setFilters] = useState(stops)
-  const setStops = useCallback(
-    () => dispatch({ type: 'SET_FILTER', payload: filters }),
-    [dispatch, filters]
+  const handleChange = useCallback(
+    (filterValue: FilterValue) =>
+      dispatch(setFilter(createFilter(stops, filterValue))),
+    [dispatch, stops]
   )
-  useEffect(() => {
-    setStops()
-  }, [setStops])
-  const handleChange = async (value: number | string) => {
-    setFilters(createFilter(filters, value))
-  }
 
   return (
     <div className={styles.filterContainer}>

@@ -1,3 +1,5 @@
+export type FilterValue = number | 'all'
+
 interface Filter {
   title: string
   value: number

@@ -1,22 +1,19 @@
-const checkFilter = (filters: number[], payload: number): number[] => {
-  return filters.indexOf(payload) === -1
-    ? [...filters, payload]
-    : filters.filter(item => item !== payload)
+import { FilterValue } from "utils/constants"
+
+const checkFilter = (filters: number[], filterValue: number) => {
+  return !filters.includes(filterValue)
+    ? [...filters, filterValue]
+    : filters.filter(item => item !== filterValue)
 }
 
-export const createFilter = (
-  filters: number[],
-  payload: number | string
-): number[] => {
-  switch (payload) {
-    case 'all':
-      return [0, 1, 2, 3]
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return checkFilter(filters, payload)
-    default:
-      return []
-  }
+const DEFAULT_FILTERS = [0, 1, 2, 3]
+
+export const createFilter = (filters: number[], filterValue: FilterValue) => {
+  if (filterValue === 'all')
+    return DEFAULT_FILTERS
+
+  if (DEFAULT_FILTERS.includes(filterValue))
+    return checkFilter(filters, filterValue)
+
+  return []
 }

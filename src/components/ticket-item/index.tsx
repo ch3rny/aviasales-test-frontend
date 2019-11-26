@@ -1,21 +1,19 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, Fragment } from 'react'
 import styles from './styles.module.css'
 import { formatDuration, formatTime } from 'utils/helpers'
-import { Plural } from 'utils/constants'
-import { Segment, Ticket } from 'store'
+import { Segment, Ticket } from 'models'
+import { avaiblePlurals } from 'utils/constants'
 
-interface SegmentProps {
+interface SegmentItemProps {
   segment: Segment
 }
 
-interface TicketProps {
-  ticket: Ticket
-}
-
-const SegmentItem = ({segment : {stops, date, duration, origin, destination}}: SegmentProps) => {
-  const stopsCount: number = useMemo(() => stops.length, [stops])
-  const formattedDuration: string = useMemo(() => formatDuration(duration), [duration])
-  const formattedTime: string = useMemo(() => formatTime(date, duration), [
+const SegmentItem = ({
+  segment: { stops, date, duration, origin, destination }
+}: SegmentItemProps) => {
+  const stopsCount = useMemo(() => stops.length, [stops])
+  const formattedDuration = useMemo(() => formatDuration(duration), [duration])
+  const formattedTime = useMemo(() => formatTime(date, duration), [
     date,
     duration
   ])
@@ -33,10 +31,12 @@ const SegmentItem = ({segment : {stops, date, duration, origin, destination}}: S
         <div>{formattedDuration}</div>
       </div>
       <div className={styles.column}>
-        <div className={styles.label}>{Plural[stopsCount]}</div>
+        <div className={styles.label}>{avaiblePlurals[stopsCount]}</div>
         <div>
-          {stops.map((stop: string, index: number) => (
-            <>{index === stopsCount - 1 ? stop : `${stop}, `}</>
+          {stops.map((stop, index) => (
+            <Fragment key={index}>
+              {index === stopsCount - 1 ? stop : `${stop}, `}
+            </Fragment>
           ))}
         </div>
       </div>
@@ -44,14 +44,20 @@ const SegmentItem = ({segment : {stops, date, duration, origin, destination}}: S
   )
 }
 
-export const TicketItem = ({ ticket: { price, carrier, segments } }: TicketProps) => {
+interface TicketItemProps {
+  ticket: Ticket
+}
+
+export const TicketItem = ({
+  ticket: { price, carrier, segments }
+}: TicketItemProps) => {
   return (
     <div className={styles.ticketContainer}>
       <div className={styles.mainInfo}>
         <span className={styles.price}>{price} P</span>
         <img src={`https://pics.avs.io/99/36/${carrier}.png`} alt={carrier} />
       </div>
-      {segments.map((segment: Segment, index: number) => (
+      {segments.map((segment, index) => (
         <SegmentItem key={index} segment={segment} />
       ))}
     </div>

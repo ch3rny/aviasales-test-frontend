@@ -1,12 +1,14 @@
-import { SET_FILTER, SET_SORTING } from '../action-types/filter'
-import { AnyAction } from 'redux'
+import { SET_FILTER, SET_SORTING } from "store/action-types/filter"
+import { SortType } from "utils/constants"
 
-export const setFilter = (payload: number[]): AnyAction => ({
+export const setFilter = (payload: number[]) => ({
   type: SET_FILTER,
   payload
-})
+} as const)
 
-export const setSorting = (payload: string): AnyAction => ({
+export const setSorting = (payload: SortType) => ({
   type: SET_SORTING,
   payload
-})
+} as const)
+
+export type FilterActions = ReturnType<typeof setFilter> | ReturnType<typeof setSorting>

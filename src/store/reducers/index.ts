@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
-import { ticketsReducer } from './ticket'
+import { ticketsReducer } from './tickets'
 import { filtersReducer } from './filter'
 import { RootStore } from 'store'
 
 export const rootReducer = combineReducers<RootStore>({
-  ticket: ticketsReducer,
+  tickets: ticketsReducer,
   filter: filtersReducer
 })
