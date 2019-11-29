@@ -27,18 +27,28 @@ const saveTickets = (payload: Ticket[]) => ({
   payload
 } as const)
 
-export const fetchTickets = () => async (
+export const startSearch = () => async (
   dispatch: ThunkDispatch<RootStore, undefined, AnyAction>
 ) => {
   dispatch(startFetching())
-
   try {
     const { data: { searchId } } = await getSearchId()
-    const { data: { tickets } } = await getTickets(searchId)
-    dispatch(saveTickets(tickets))
-    dispatch(successFetching())
+    dispatch(fetchTickets(searchId))
   } catch {
     dispatch(failFetching())
+  }
+}
+
+export const fetchTickets = (searchId: string) => async (
+  dispatch: ThunkDispatch<RootStore, undefined, AnyAction>
+) => {
+  try {
+    const { data: { tickets, stop } } = await getTickets(searchId)
+    dispatch(saveTickets(tickets))
+    stop ? dispatch(successFetching()) : dispatch(fetchTickets(searchId))
+  } catch {
+    dispatch(failFetching())
+    dispatch(fetchTickets(searchId))
   }
 }
 

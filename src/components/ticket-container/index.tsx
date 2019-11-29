@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import { filterTickets } from 'utils/helpers'
 import { TicketItem } from 'components/ticket-item'
 import { useSelector, useDispatch } from 'store'
-import { fetchTickets } from 'store/actions/tickets'
+import { startSearch } from 'store/actions/tickets'
 
 export const TicketContainer = () => {
   const stops = useSelector(state => state.filter.stops)
@@ -11,7 +11,7 @@ export const TicketContainer = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(fetchTickets())
+    dispatch(startSearch())
   }, [dispatch])
 
   const filteredTickets = useMemo(
